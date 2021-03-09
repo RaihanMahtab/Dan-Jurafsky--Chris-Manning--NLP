@@ -363,11 +363,10 @@ This model has also three methods:
   ```
 
 - **`score(sentence)`**:
-  This method takes a list of strings as argument and returns the log-probability of the sentence using Laplace unigram language model.
-  
+  This method takes a list of strings as argument and returns the log-probability of the sentence using Laplace bigram language model.
+  Here We have added one as a way of smoothing, because some words in the dev corpus that weren't in the train corpus. The equation for
+  this is =  ( C(wi-1,wi)+1 )/ (C(wi-1) +V) -> V = the words that are not seen in the corpus but is in the sentence. 
 ![eq](http://latex.codecogs.com/gif.latex?score%20%3D%5Csum%5Cleft%20%5Blog%28WordCount%20&plus;%201%29%20-%20log%28total%29%20%5Cright%20%5D)
-
-We have added one as a way of smoothing, because some words in the dev corpus that weren't in the train corpus.
 
 
 
