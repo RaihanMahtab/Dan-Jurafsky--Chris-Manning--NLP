@@ -366,6 +366,7 @@ This model has also three methods:
   This method takes a list of strings as argument and returns the log-probability of the sentence using Laplace bigram language model.
   Here We have added one as a way of smoothing, because some words in the dev corpus that weren't in the train corpus. The equation for
   this is =  ( C(wi-1,wi)+1 )/ (C(wi-1) +V) -> V = the words that are not seen in the corpus but is in the sentence. 
+  
 ![eq](http://latex.codecogs.com/gif.latex?score%20%3D%5Csum%5Cleft%20%5Blog%28WordCount%20&plus;%201%29%20-%20log%28total%29%20%5Cright%20%5D)
 
 
@@ -411,7 +412,8 @@ And it has three member functions:
 - **`score(sentence)`**:
 
   This method takes a list of strings as argument and returns the log-probability of the sentence according to the following formula:
-
+  We have also multiplied by 0.4 for the first case where we are considering bi gram
+  
   ![](http://www.mediafire.com/convkey/e988/4bf39ajrpazcbwozg.jpg)
 
 > 
@@ -438,7 +440,7 @@ And it has two member methods:
 - **`train(corpus)`**:
   This method takes the train corpus located at `'../data/holbrook-tagged-train.dat` as an input. 
 - **`score(sentence)`**:
-  This method takes a list of strings as argument and returns the log-probability of the sentence using Laplace unigram language model along with Good Turing smoothing.
+  This method takes a list of strings as argument and returns the log-probability of the sentence using Laplace unigram language model along with Good Turing smoothing. It means the probability = modified count of a word/divided by all words in corpus. Modified count = ((c+1)*N(c+1)) /N(c)
 
 
 
@@ -493,6 +495,27 @@ And it has three member functions:
 ## SpellCorrect.py
 
 This file is the file that should be run. This file calls all the models above, and evaluate their performance. This is the output of running this file:
+
+- **`evaluate(corpus): `**:
+
+This method takes a corpus and evaluate it with the language model in SpellCorrect. For each sentence in the corpus, it generates test cases that
+have one misspelling in them. Then for these test cases, it generates an error sentence and then corrects it. (The test cases have datum objects)
+in them where the real and misspelling is both present). We generate the error sentence with the misspelling and corrects it via correctSentence
+method. We return the ratio of how many corrected sentence mathce the test cases( The correct spellings in them).
+
+- **`correctSentence(sentence): `**:
+
+For each word in the sentence, we create candidate words that can replace it via the edit model. Then we choose the one that has the highest 
+edit model/error model/likelihood P(w|x) and the sentence bigram probability(Through the language model). We do it for each word of the sentence. The sentence that has the highest prob is returned.
+
+- **`correctCorpus(corpus): `**:
+
+We correct a whole corpus by performing correctSentence on each of the sentence of the corpus. Then we save it in a list that has a json
+format
+
+- **`main(): `**:
+
+We evaluate the dev data with all the language models and print their accuracy
 
 ![](http://www.mediafire.com/convkey/cb08/u4w63p594ydb22nzg.jpg)
 
