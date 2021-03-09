@@ -71,6 +71,8 @@ class LaplaceBigramLanguageModel:
     # TODO your code here
     score = 0.0
     V = 0.0
+    
+    #Here vocab size seems to be the number of tokens not in corpus but in the sentence
     for token in sentence:
       if self.LaplaceUnigramCounts[token] == 0:
         V += 1.0
