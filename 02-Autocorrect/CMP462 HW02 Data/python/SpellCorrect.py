@@ -91,8 +91,10 @@ class SpellCorrect:
       uncorrected = sentence.getErrorSentence()
       corrected = self.correctSentence(uncorrected) # List<String>
       word_list = '["%s"]' % '","'.join(corrected)
+      #alternatively you can use ->word_list='["{}"]'.format('","'.join(corrected))
       string_list.append(word_list)
     output = '[%s]' % ','.join(string_list)
+    #alternatively you can use ->output='[{}]'.format(','.join(string_list))
     return output
 
 
