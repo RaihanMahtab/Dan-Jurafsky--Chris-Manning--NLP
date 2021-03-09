@@ -83,5 +83,7 @@ class LaplaceBigramLanguageModel:
       count1 = self.LaplaceBigramCounts[token]
       count2 = self.LaplaceUnigramCounts[first_word]
       score += math.log(count1+1.)
-      score -= math.log(count2+V)
+      score -= math.log(count2+V) #The unigram count is the count in corpus
+      #V=number of first seen words in sentence. As prev word can appear with them too,
+      #we have to add this according to Laplace model
     return score
