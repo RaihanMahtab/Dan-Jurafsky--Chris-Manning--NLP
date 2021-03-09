@@ -9,7 +9,7 @@ class GoodTuringUnigramLanguageModel:
     self.Unicounts = model.LaplaceUnigramCounts
     self.newCounts = copy.copy(self.Unicounts)
     self.N = model.total
-    self.N_1 = self.Unicounts.values().count(1)
+    self.N_1 = self.Unicounts.values().count(1) #Retrun the number of times a value appears one time
     self.train()
 
   def train(self):
