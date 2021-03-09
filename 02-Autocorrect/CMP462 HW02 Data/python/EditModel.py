@@ -21,6 +21,10 @@ class EditModel:
     s = [(word[:i], word[i:]) for i in range(len(word) + 1)]
     counts = collections.defaultdict(lambda: 0)
     # deletes
+    # deleted char = b[0]. b= s[0:],s[1:],s[2:] etc. So, every time the deleted char is s[0],s[1],s[2]...
+    # the original chars a[-1]b[0] replaced by only a[-1]. The replaced string is a+b[1:] where a=s[:i] and b=s[i:]
+    #First loop -> a='', b=s, deleted char=b[0]=s[0] original = b[0], replacement = ''
+    #First loop -> a=s, b=''-> b not in vocab, loop wont run
     for a, b in s:
       if b and a + b[1:] in self.vocabulary:
         tail = ''
