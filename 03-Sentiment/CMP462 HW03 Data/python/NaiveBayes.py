@@ -20,6 +20,7 @@ class NaiveBayes:
     """Represents a document with a label. klass is 'pos' or 'neg' by convention.
        words is a list of strings.
     """
+    #constructor for Example class
     def __init__(self):
       self.klass = ''
       self.words = []
@@ -27,6 +28,7 @@ class NaiveBayes:
   class TrainSplit:
     """Represents a set of training/testing data. self.train is a list of Examples, as is self.test.
     """
+    #constructor for TrainSplit class
     def __init__(self):
       self.train = []
       self.test = []
@@ -35,7 +37,7 @@ class NaiveBayes:
     """NaiveBayes initialization"""
     self.FILTER_STOP_WORDS = False
     self.BOOLEAN = False
-    self.stopList = set(self.readFile('../data/english.stop'))
+    self.stopList = set(self.readFile('../data/english.stop')) #A list of stop words
     self.numFolds = 10
     #The following two Counter objects are used to save the words in the positive reviews 
     #and the negative ones respectively
@@ -119,22 +121,24 @@ class NaiveBayes:
     for line in f:
       contents.append(line)
     f.close()
-    result = self.segmentWords('\n'.join(contents))
+    result = self.segmentWords('\n'.join(contents)) #appends a new line at 
+    #the end of each line and converts it into a string. Each original line is at
+    #its own line
     return result
 
   def segmentWords(self, s):
     """
-     * Splits lines on whitespace for file reading
+     * Splits lines on whitespace and newline for file reading -> Newline will also be counted as space
     """
     return s.split()
 
   def trainSplit(self, trainDir):
     """Takes in a trainDir, returns one TrainSplit with train set."""
-    split = self.TrainSplit()
+    split = self.TrainSplit() #TrainSplit is a class that initializes a training and a test set
     posTrainFileNames = os.listdir('%s/pos/' % trainDir)
     negTrainFileNames = os.listdir('%s/neg/' % trainDir)
     for fileName in posTrainFileNames:
-      example = self.Example()
+      example = self.Example() 
       example.words = self.readFile('%s/pos/%s' % (trainDir, fileName))
       example.klass = 'pos'
       split.train.append(example)
@@ -158,17 +162,23 @@ class NaiveBayes:
     testData = []
     splits = []
     trainDir = '../data/imdb1'
-    print '[INFO]\tPerforming %d-fold cross-validation on data set:\t%s' % (self.numFolds, trainDir)
+    print(f'[INFO]\tPerforming {self.numFolds}-fold cross-validation on data set:\t{trainDir}')
+#     print '[INFO]\tPerforming %d-fold cross-validation on data set:\t%s' % (self.numFolds, trainDir)
 
     posTrainFileNames = os.listdir('%s/pos/' % trainDir)
     negTrainFileNames = os.listdir('%s/neg/' % trainDir)
     for fold in range(0, self.numFolds):
-      split = self.TrainSplit()
+      split = self.TrainSplit()#TrainSplit is a class that initializes a training and a test set
       for fileName in posTrainFileNames:
-        example = self.Example()
+        example = self.Example() #Example is a class that initiates a Klass variable and word list
+        #Klass defines what type the document is (positive or negative) and word is a list of words
+        #in a review
         example.words = self.readFile('%s/pos/%s' % (trainDir, fileName))
         example.klass = 'pos'
-        if fileName[2] == str(fold):
+        if fileName[2] == str(fold): #clever way to insert data into test set
+          #when its the first fold, fold =0. fileName[2] for the first 100 (0-99) will be 0
+          #This will be appended to test set. The remaining 900 will be in the training set
+          #For second folding 100-199 will be in test and remaining will be in training set
           split.test.append(example)
         else:
           split.train.append(example)
@@ -180,7 +190,9 @@ class NaiveBayes:
           split.test.append(example)
         else:
           split.train.append(example)
-      splits.append(split)
+      splits.append(split) #It now holds the 10 fold training and test sets.Inside it is 10 TrainingSplit
+      #objects that each hold a training and a test set. In each training and test set, there are Example objects
+      #for each positiv/negative review that hold the words and the pos/neg tag for each review
     return splits
 
 
@@ -218,7 +230,8 @@ def main():
           if nB.FILTER_STOP_WORDS:
             words =  classifier.filterStopWords(words)
           guess = classifier.classify(words)
-          if example.klass == guess:
+          if example.klass == guess: #We know the pos/neg tag for the whole dataset
+            #We can use it to measure our accuracy
             accuracy += 1.0
 
         accuracy = accuracy / len(split.test)
